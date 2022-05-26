@@ -17,21 +17,21 @@ class SimpleHydratorTest extends TestCase
         parent::setUp();
 
         $this->data = [
-            'name'          => 'John',
-            'kids'          => 0,
-            'dateOfBirth'   => '1969-07-20',
-            'money'         => 33.3,
-            'male'          => true,
-            'items'         => ['phone', 'wallet', 'keys'],
-            'car'           => null,
-            'mother'        => [
-                'name'  => 'Jane',
-                'kids'  => 2,
+            'name' => 'John',
+            'kids' => 0,
+            'dateOfBirth' => '1969-07-20',
+            'money' => 33.3,
+            'male' => true,
+            'items' => ['phone', 'wallet', 'keys'],
+            'car' => null,
+            'mother' => [
+                'name' => 'Jane',
+                'kids' => 2,
                 'money' => 66.6,
-                'male'  => false,
+                'male' => false,
                 'items' => ['phone', 'keys'],
-                'car'   => [
-                    'type'  => '911',
+                'car' => [
+                    'type' => '911',
                     'brand' => 'Porsche',
                 ],
             ],

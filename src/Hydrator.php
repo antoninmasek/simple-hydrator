@@ -14,7 +14,7 @@ abstract class Hydrator
             return null;
         }
 
-        $reflectionClass   = new ReflectionObject($dto = new $className());
+        $reflectionClass = new ReflectionObject($dto = new $className());
         $publicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
