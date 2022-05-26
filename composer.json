@@ -1,0 +1,48 @@
+{
+    "name": "antoninmasek/simple-hydrator",
+    "description": "This is my package simple-hydrator",
+    "keywords": [
+        "antoninmasek",
+        "simple-hydrator"
+    ],
+    "homepage": "https://github.com/antoninmasek/simple-hydrator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Antonín Mašek",
+            "email": "antonin.masek@icloud.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "spatie/ray": "^1.28"
+    },
+    "autoload": {
+        "psr-4": {
+            "AntoninMasek\\SimpleHydrator\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AntoninMasek\\SimpleHydrator\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
