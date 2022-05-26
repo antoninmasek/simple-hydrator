@@ -5,38 +5,49 @@ namespace AntoninMasek\SimpleHydrator\Tests;
 use AntoninMasek\SimpleHydrator\Hydrator;
 use AntoninMasek\SimpleHydrator\Tests\Models\Car;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class SimpleHydratorTest extends TestCase
 {
-    private array $data = [
-        'name'   => 'John',
-        'age'    => 20,
-        'money'  => 33.3,
-        'male'   => true,
-        'items'  => ['phone', 'wallet', 'keys'],
-        'car'    => null,
-        'mother' => [
-            'name'  => 'Jane',
-            'age'   => 40,
-            'money' => 66.6,
-            'male'  => false,
-            'items' => ['phone', 'keys'],
-            'car'   => [
-                'type'  => '911',
-                'brand' => 'Porsche',
+    private array $data;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->data = [
+            'name'          => 'John',
+            'kids'          => 0,
+            'dateOfBirth'   => '1969-07-20',
+            'money'         => 33.3,
+            'male'          => true,
+            'items'         => ['phone', 'wallet', 'keys'],
+            'car'           => null,
+            'mother'        => [
+                'name'  => 'Jane',
+                'kids'  => 2,
+                'money' => 66.6,
+                'male'  => false,
+                'items' => ['phone', 'keys'],
+                'car'   => [
+                    'type'  => '911',
+                    'brand' => 'Porsche',
+                ],
             ],
-        ],
-    ];
+        ];
+    }
 
     public function testItCanHydrateObjectUsingHydrator()
     {
         $tony = Hydrator::hydrateRaw(Human::class, $this->data);
 
         $this->assertSame('John', $tony->name);
-        $this->assertSame(20, $tony->age);
+        $this->assertSame(0, $tony->kids);
+        $this->assertTrue($tony->dateOfBirth instanceof DateTime);
         $this->assertSame(33.3, $tony->money);
         $this->assertSame(true, $tony->male);
+        $this->assertCount(3, $tony->items);
         $this->assertCount(3, $tony->items);
         $this->assertSame('phone', $tony->items[0]);
         $this->assertSame('wallet', $tony->items[1]);
@@ -46,7 +57,7 @@ class SimpleHydratorTest extends TestCase
 
         $mother = $tony->mother;
         $this->assertSame('Jane', $mother->name);
-        $this->assertSame(40, $mother->age);
+        $this->assertSame(2, $mother->kids);
         $this->assertSame(66.6, $mother->money);
         $this->assertSame(false, $mother->male);
         $this->assertCount(2, $mother->items);
@@ -66,10 +77,10 @@ class SimpleHydratorTest extends TestCase
 
     public function testObjectCanHydrateItselfWhenExtendingHydrator()
     {
-        $tony = Human::hydrate( $this->data);
+        $tony = Human::hydrate($this->data);
 
         $this->assertSame('John', $tony->name);
-        $this->assertSame(20, $tony->age);
+        $this->assertSame(0, $tony->kids);
         $this->assertSame(33.3, $tony->money);
         $this->assertSame(true, $tony->male);
         $this->assertCount(3, $tony->items);
@@ -81,7 +92,7 @@ class SimpleHydratorTest extends TestCase
 
         $mother = $tony->mother;
         $this->assertSame('Jane', $mother->name);
-        $this->assertSame(40, $mother->age);
+        $this->assertSame(2, $mother->kids);
         $this->assertSame(66.6, $mother->money);
         $this->assertSame(false, $mother->male);
         $this->assertCount(2, $mother->items);

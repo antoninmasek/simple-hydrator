@@ -2,6 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use DateTime;
 use ReflectionObject;
 use ReflectionProperty;
 
@@ -22,7 +23,10 @@ abstract class Hydrator
                 : null;
 
             if (! $property->getType()->isBuiltin()) {
-                $value = self::hydrateRaw($property->getType()->getName(), $value);
+                $value = match ($property->getType()->getName()) {
+                    DateTime::class => new DateTime($value),
+                    default => self::hydrateRaw($property->getType()->getName(), $value),
+                };
             }
 
             $property->setValue(
