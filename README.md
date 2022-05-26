@@ -1,21 +1,17 @@
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
-
-# This is my package simple-hydrator
+# Simple Hydrator
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/antoninmasek/simple-hydrator.svg?style=flat-square)](https://packagist.org/packages/antoninmasek/simple-hydrator)
 [![Tests](https://github.com/antoninmasek/simple-hydrator/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/antoninmasek/simple-hydrator/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/antoninmasek/simple-hydrator.svg?style=flat-square)](https://packagist.org/packages/antoninmasek/simple-hydrator)
 
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
+This package aims to be an extremely easy-to-use object hydrator. You give it an array and it will try to hydrate your
+data object. I found myself repeating this logic a few times on different projects, so I decided to package it up. I am
+well aware, that there are far more superior alternatives, but my aim was to do the implementation as simple as
+possible.
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/simple-hydrator.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/simple-hydrator)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Also, the main objective for me was, to scratch my own itch. So even though the implementation is now limited and
+possibly contains some issues, for me, it is currently doing the job just fine. If you, however, find yourself using it
+too and find an issue, feel free to PR it :)
 
 ## Installation
 
@@ -27,10 +23,30 @@ composer require antoninmasek/simple-hydrator
 
 ## Usage
 
+To hydrate your data object you have two options:
+
+### Hydrator::hydrate
+
+You can use the `Hydrator` as follows:
+
 ```php
-$skeleton = new AntoninMasek\SimpleHydrator();
-echo $skeleton->echoPhrase('Hello, AntoninMasek!');
+$human = Hydrator::hydrate(Human::class, $data);
 ```
+
+Advantage of this approach is, that your data object does not have to extend anything. Downside is, that without PHP Doc
+you won't have autocompletion.
+
+### _YourDataObject_::fromArray
+
+This way, you can extend your data object with `DataObject` abstract class, which will enable you to call `fromArray`
+method directly on your data object.
+
+```php
+$human = Human::fromArray($data);
+```
+
+Main advantage is autocompletion as well as better readability. Disadvantage is, that you have to extend your data
+object. At least the parent. Nested object does not have to extend anything.
 
 ## Testing
 
@@ -42,18 +58,9 @@ composer test
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
-
-Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
 - [Antonín Mašek](https://github.com/antoninmasek)
-- [All Contributors](../../contributors)
 
 ## License
 
