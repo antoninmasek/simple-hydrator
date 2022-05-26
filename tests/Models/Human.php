@@ -2,10 +2,10 @@
 
 namespace AntoninMasek\SimpleHydrator\Tests\Models;
 
-use AntoninMasek\SimpleHydrator\Hydrator;
+use AntoninMasek\SimpleHydrator\DataObject;
 use DateTime;
 
-class Human extends Hydrator
+class Human extends DataObject
 {
     public string $name;
     public int $kids;

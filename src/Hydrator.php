@@ -8,7 +8,7 @@ use ReflectionProperty;
 
 abstract class Hydrator
 {
-    public static function hydrateRaw(string $className, array $data = null): ?object
+    public static function hydrate(string $className, array $data = null): ?object
     {
         if (empty($data)) {
             return null;
@@ -25,7 +25,7 @@ abstract class Hydrator
             if (! $property->getType()->isBuiltin()) {
                 $value = match ($property->getType()->getName()) {
                     DateTime::class => new DateTime($value),
-                    default => self::hydrateRaw($property->getType()->getName(), $value),
+                    default => self::hydrate($property->getType()->getName(), $value),
                 };
             }
 
@@ -36,10 +36,5 @@ abstract class Hydrator
         }
 
         return $dto;
-    }
-
-    public static function hydrate(array $data = null): ?static
-    {
-        return self::hydrateRaw(static::class, $data);
     }
 }

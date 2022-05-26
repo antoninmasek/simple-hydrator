@@ -40,7 +40,7 @@ class SimpleHydratorTest extends TestCase
 
     public function testItCanHydrateObjectUsingHydrator()
     {
-        $tony = Hydrator::hydrateRaw(Human::class, $this->data);
+        $tony = Hydrator::hydrate(Human::class, $this->data);
 
         $this->assertSame('John', $tony->name);
         $this->assertSame(0, $tony->kids);
@@ -70,14 +70,14 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('911', $car->type);
         $this->assertSame('Porsche', $car->brand);
 
-        $car = Hydrator::hydrateRaw(Car::class, $this->data['mother']['car']);
+        $car = Hydrator::hydrate(Car::class, $this->data['mother']['car']);
         $this->assertSame('911', $car->type);
         $this->assertSame('Porsche', $car->brand);
     }
 
     public function testObjectCanHydrateItselfWhenExtendingHydrator()
     {
-        $tony = Human::hydrate($this->data);
+        $tony = Human::fromArray($this->data);
 
         $this->assertSame('John', $tony->name);
         $this->assertSame(0, $tony->kids);
@@ -108,14 +108,14 @@ class SimpleHydratorTest extends TestCase
 
     public function testItReturnsNullWhenNullIsSupplied()
     {
-        $tony = Hydrator::hydrateRaw(Human::class, null);
+        $tony = Hydrator::hydrate(Human::class, null);
 
         $this->assertNull($tony);
     }
 
     public function testItReturnsNullWhenEmptyArrayIsSupplied()
     {
-        $tony = Hydrator::hydrateRaw(Human::class, []);
+        $tony = Hydrator::hydrate(Human::class, []);
 
         $this->assertNull($tony);
     }
