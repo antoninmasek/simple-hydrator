@@ -1,6 +1,9 @@
 <?php
 
-$finder = Symfony\Component\Finder\Finder::create()
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = Finder::create()
     ->in([
         __DIR__ . '/src',
         __DIR__ . '/tests',
@@ -9,31 +12,20 @@ $finder = Symfony\Component\Finder\Finder::create()
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
 
-return (new PhpCsFixer\Config())
+return (new Config())
     ->setRules([
-        '@PSR12' => true,
-        'array_syntax' => ['syntax' => 'short'],
-        'ordered_imports' => ['sort_algorithm' => 'alpha'],
-        'no_unused_imports' => true,
-        'not_operator_with_successor_space' => true,
-        'trailing_comma_in_multiline' => true,
-        'phpdoc_scalar' => true,
-        'unary_operator_spaces' => true,
-        'binary_operator_spaces' => true,
-        'blank_line_before_statement' => [
-            'statements' => ['break', 'continue', 'declare', 'return', 'throw', 'try'],
-        ],
-        'phpdoc_single_line_var_spacing' => true,
-        'phpdoc_var_without_name' => true,
-        'class_attributes_separation' => [
-            'elements' => [
-                'method' => 'one',
+        '@Symfony'                          => true,
+        'phpdoc_no_empty_return'            => false,
+        'array_syntax'                      => ['syntax'  => 'short'],
+        'yoda_style'                        => false,
+        'binary_operator_spaces'            => [
+            'operators' => [
+                '=>' => 'align',
+                '='  => 'align',
             ],
         ],
-        'method_argument_space' => [
-            'on_multiline' => 'ensure_fully_multiline',
-            'keep_multiple_spaces_after_comma' => true,
-        ],
-        'single_trait_insert_per_statement' => true,
+        'concat_space'                      => ['spacing' => 'one'],
+        'increment_style'                   => ['style'   => 'post'],
+        'not_operator_with_successor_space' => true,
     ])
     ->setFinder($finder);

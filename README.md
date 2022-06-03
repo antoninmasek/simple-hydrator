@@ -48,6 +48,19 @@ $human = Human::fromArray($data);
 Main advantage is autocompletion as well as better readability. Disadvantage is, that you have to extend your data
 object. At least the parent. Nested object does not have to extend anything.
 
+### DTO Making
+
+For each of your DTO's properties you can use either a camelCase or snake_case approach to set their values which ever
+suites your preference, in the example below we have the propeties `first_name` and `last_name` set on the DTO here.
+
+
+```php
+$person = Human::make()
+    ->firstName('John')
+    ->lastName('Doe')
+    ->kids(3);
+```
+
 ## Testing
 
 ```bash

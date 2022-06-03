@@ -14,7 +14,7 @@ abstract class Hydrator
             return null;
         }
 
-        $reflectionClass = new ReflectionObject($dto = new $className());
+        $reflectionClass  = new ReflectionObject($dto  = new $className());
         $publicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
@@ -24,8 +24,8 @@ abstract class Hydrator
 
             if (! $property->getType()->isBuiltin()) {
                 $value = match ($property->getType()->getName()) {
-                    DateTime::class => new DateTime($value),
-                    default => self::hydrate($property->getType()->getName(), $value),
+                    DateTime::class => $value ? new DateTime($value) : null,
+                    default         => self::hydrate($property->getType()->getName(), $value),
                 };
             }
 
