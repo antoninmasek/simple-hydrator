@@ -1,8 +1,8 @@
 <?php
 
-namespace AntoninMasek\SimpleHydrator;
+namespace AntoninMasek\SimpleHydrator\Support;
 
-final class Helper
+final class Str
 {
     public static function camel($value): ?string
     {

@@ -2,6 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use AntoninMasek\SimpleHydrator\Support\Str;
 use ReflectionObject;
 use ReflectionProperty;
 
@@ -25,7 +26,7 @@ class DataObject
         foreach ($properties as $property) {
             $name = $property->getName();
 
-            if (Helper::camel($name) === Helper::camel($method)) {
+            if (Str::camel($name) === Str::camel($method)) {
                 $property->setValue($this, ...$arguments);
             }
         }
