@@ -152,6 +152,20 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('Steve', $person->first_name);
     }
 
+    public function testImmutability()
+    {
+        $person = Human::fromArray($this->data);
+        $this->assertSame('John', $person->name);
+
+        $person->set('name', 'Dave');
+        $this->assertSame('John', $person->name);
+
+        $person2 = $person->set('name', 'Dave');
+        $this->assertSame('Dave', $person2->name);
+
+        $this->assertNotSame(spl_object_id($person), spl_object_id($person2));
+    }
+
     public function testObjectTypeError()
     {
         $this->expectException(TypeError::class);

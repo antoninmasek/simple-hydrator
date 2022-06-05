@@ -20,18 +20,19 @@ class DataObject
 
     public function set(string $propertyName, mixed $value): static
     {
-        $reflectionClass = new ReflectionObject($this);
+        $clone           = clone $this;
+        $reflectionClass = new ReflectionObject($clone);
         $properties      = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($properties as $property) {
             $name = $property->getName();
 
             if (Str::camel($name) === Str::camel($propertyName)) {
-                $property->setValue($this, $value);
+                $property->setValue($clone, $value);
             }
         }
 
-        return $this;
+        return $clone;
     }
 
     public function __call($method, $arguments): static
