@@ -4,7 +4,7 @@ namespace AntoninMasek\SimpleHydrator\Casters;
 
 use DateTime;
 
-class DateTimeCaster extends AbstractCaster
+class DateTimeCaster extends Caster
 {
     public function cast(mixed $value): ?DateTime
     {

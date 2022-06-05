@@ -2,10 +2,9 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
-use AntoninMasek\SimpleHydrator\Casters\AbstractCaster;
+use AntoninMasek\SimpleHydrator\Casters\Caster;
 use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
-use AntoninMasek\SimpleHydrator\Exceptions\UnknownCastException;
-use DateTime;
+use AntoninMasek\SimpleHydrator\Exceptions\UnknownCasterException;
 use ReflectionObject;
 use ReflectionProperty;
 
@@ -17,7 +16,7 @@ abstract class Hydrator
             return null;
         }
 
-        $reflectionClass  = new ReflectionObject($dto  = new $className());
+        $reflectionClass  = new ReflectionObject($dto = new $className());
         $publicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
@@ -25,19 +24,22 @@ abstract class Hydrator
                 ? $data[$property->getName()]
                 : null;
 
-            if (! $property->getType()->isBuiltin()) {
-                try {
-                    $value = AbstractCaster::make($property)
-                        ->cast($value);
-                } catch (CasterException) {
-                    $value = self::hydrate($property->getType()->getName(), $value);
-                }
+            if ($property->getType()->isBuiltin()) {
+                $property->setValue($dto, $value);
+                continue;
             }
 
-            $property->setValue(
-                $dto,
-                $value,
-            );
+            try {
+                $value = Caster::make($property)->cast($value);
+            } catch (UnknownCasterException) {
+                if (! is_null($value) && ! is_array($value)) {
+                    throw CasterException::invalidValue($property->getType()->getName(), $value);
+                }
+
+                $value = self::hydrate($property->getType()->getName(), $value);
+            }
+
+            $property->setValue($dto, $value);
         }
 
         return $dto;

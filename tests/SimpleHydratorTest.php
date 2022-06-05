@@ -2,8 +2,12 @@
 
 namespace AntoninMasek\SimpleHydrator\Tests;
 
+use AntoninMasek\SimpleHydrator\Casters\Caster;
+use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
 use AntoninMasek\SimpleHydrator\Hydrator;
+use AntoninMasek\SimpleHydrator\Tests\Casters\TestingCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Car;
+use AntoninMasek\SimpleHydrator\Tests\Models\ClassThatNeedsCustomCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -133,5 +137,18 @@ class SimpleHydratorTest extends TestCase
         $this->expectException(TypeError::class);
 
         $person = Human::make()->dateOfBirth('test');
+    }
+
+    public function testItIsPossibleToWriteCaster()
+    {
+        $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
+
+        $this->expectException(CasterException::class);
+        $class = Hydrator::hydrate(Car::class, $data);
+
+        Caster::registerCaster(ClassThatNeedsCustomCaster::class, TestingCaster::class);
+
+        $expectedValue = floatval((new DateTime())->format('n'));
+        $this->assertSame($expectedValue, $class->customCaster->value);
     }
 }
