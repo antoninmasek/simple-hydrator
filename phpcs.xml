@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<ruleset name="Standard">
+    <description>PHPCS Standards</description>
+
+    <rule ref="PSR1" />
+
+    <rule ref="PSR2" />
+
+    <rule ref="PSR2.Namespaces.NamespaceDeclaration" />
+
+    <rule ref="Generic.Files.LineEndings">
+        <properties>
+            <property name="eolChar" value="\n" />
+        </properties>
+    </rule>
+
+    <rule ref="Zend.Files.ClosingTag" />
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120" />
+            <property name="absoluteLineLimit" value="0" />
+        </properties>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <property name="ignoreBlankLines" value="true" />
+        </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.StartFile">
+        <serverity>0</serverity>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndFile">
+        <serverity>0</serverity>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
+        <serverity>0</serverity>
+    </rule>
+
+    <rule ref="Generic.Formatting.DisallowMultipleStatements" />
+
+    <rule ref="Generic.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="tabIndent" value="false" />
+        </properties>
+    </rule>
+
+    <rule ref="Generic.PHP.LowerCaseKeyword" />
+    <rule ref="Generic.PHP.LowerCaseConstant" />
+
+    <rule ref="Squiz.Scope.MethodScope" />
+    <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing" />
+    <rule ref="Squiz.Functions.LowercaseFunctionKeywords" />
+
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+        <properties>
+            <property name="equalSpacing" value="1" />
+        </properties>
+    </rule>
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterHint">
+        <serverity>0</serverity>
+    </rule>
+
+    <rule ref="PEAR.Functions.ValidDefaultValue" />
+
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration" />
+
+    <rule ref="Generic.Functions.FunctionCallArgumentSpacing" />
+    <rule ref="PSR2.Methods.FunctionCallSignature.SpaceAfterCloseBracket">
+        <serverity>0</serverity>
+    </rule>
+
+    <rule ref="Squiz.WhiteSpace.ScopeClosingBrace" />
+    <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration" />
+    <rule ref="Squiz.ControlStructures.ForLoopDeclaration" />
+    <rule ref="Squiz.ControlStructures.LowercaseDeclaration" />
+
+    <rule ref="Generic.ControlStructures.InlineControlStructure" />
+
+    <exclude-pattern>./vendor/*</exclude-pattern>
+
+</ruleset>
