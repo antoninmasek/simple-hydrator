@@ -12,7 +12,7 @@ class TestingCaster extends Caster
     {
         $class = new ClassThatNeedsCustomCaster();
 
-        $class->value = floatval((new DateTime())->format('n'));
+        $class->value = floatval((new DateTime())->format('n')) + $value;
 
         return $class;
     }

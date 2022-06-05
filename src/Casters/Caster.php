@@ -22,10 +22,15 @@ abstract class Caster
         return self::$casters = $map;
     }
 
-    public static function registerCaster(string $className, string $casterClassName): array
+    public static function clearCasters(): array
+    {
+        return self::$casters = [];
+    }
+
+    public static function registerCaster(string $className, string|callable $caster): array
     {
         return self::setCasters(array_merge(self::$casters, [
-            $className => $casterClassName,
+            $className => $caster,
         ]));
     }
 
@@ -37,15 +42,28 @@ abstract class Caster
     {
         $propertyClassName = $property->getType()->getName();
 
-        $casterClassName   = ! array_key_exists($propertyClassName, self::$casters)
+        $casterClassNameOrCallable   = ! array_key_exists($propertyClassName, self::$casters)
             ? self::CASTERS_NAMESPACE . "\\$propertyClassName" . self::CASTERS_SUFFIX
             : self::$casters[$propertyClassName];
 
-        if (! class_exists($casterClassName)) {
-            throw new UnknownCasterException($casterClassName);
+        if (is_callable($casterClassNameOrCallable)) {
+            return new class($casterClassNameOrCallable) extends Caster {
+                public function __construct(private mixed $callable)
+                {
+                }
+
+                public function cast(mixed $value): mixed
+                {
+                    return ($this->callable)($value);
+                }
+            };
         }
 
-        $caster = new $casterClassName($property);
+        if (! class_exists($casterClassNameOrCallable)) {
+            throw new UnknownCasterException($casterClassNameOrCallable);
+        }
+
+        $caster = new $casterClassNameOrCallable($property);
 
         if (! ($caster instanceof Caster)) {
             throw new InvalidCasterException();

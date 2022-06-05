@@ -21,6 +21,8 @@ class SimpleHydratorTest extends TestCase
     {
         parent::setUp();
 
+        Caster::clearCasters();
+
         $this->data = [
             'name'        => 'John',
             'kids'        => 0,
@@ -139,16 +141,64 @@ class SimpleHydratorTest extends TestCase
         $person = Human::make()->dateOfBirth('test');
     }
 
-    public function testItIsPossibleToWriteCaster()
+    public function testItFailsWithoutCustomCaster()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
 
         $this->expectException(CasterException::class);
-        $class = Hydrator::hydrate(Car::class, $data);
+
+        Hydrator::hydrate(Car::class, $data);
+    }
+
+    public function testItIsPossibleToWriteCaster()
+    {
+        $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
 
         Caster::registerCaster(ClassThatNeedsCustomCaster::class, TestingCaster::class);
 
-        $expectedValue = floatval((new DateTime())->format('n'));
+        $class = Hydrator::hydrate(Car::class, $data);
+
+        $expectedValue = floatval((new DateTime())->format('n')) + 36;
         $this->assertSame($expectedValue, $class->customCaster->value);
+    }
+
+    public function testItIsPossibleToWriteAnonymousCaster()
+    {
+        $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
+
+        Caster::registerCaster(ClassThatNeedsCustomCaster::class, function ($value) {
+            $class = new ClassThatNeedsCustomCaster();
+
+            $class->value = floatval((new DateTime())->format('n')) + $value;
+
+            return $class;
+        });
+
+        $class = Hydrator::hydrate(Car::class, $data);
+
+        $expectedValue = floatval((new DateTime())->format('n')) + 36;
+        $this->assertSame($expectedValue, $class->customCaster->value);
+    }
+
+    public function testItIsPossibleToOverwriteDefaultCaster()
+    {
+        $data                = $this->data;
+        $data['dateOfBirth'] = -14256000;
+
+        $person = Human::fromArray($data);
+        $this->assertNotEquals(1969, $person->dateOfBirth->format('Y'));
+        $this->assertNotEquals(07, $person->dateOfBirth->format('m'));
+        $this->assertNotEquals(20, $person->dateOfBirth->format('d'));
+
+        Caster::registerCaster(DateTime::class, function ($value) {
+            return (new DateTime())->setTimestamp($value);
+        });
+
+        $person = Human::fromArray($data);
+
+        $this->assertTrue($person->dateOfBirth instanceof DateTime);
+        $this->assertEquals(1969, $person->dateOfBirth->format('Y'));
+        $this->assertEquals(07, $person->dateOfBirth->format('m'));
+        $this->assertEquals(20, $person->dateOfBirth->format('d'));
     }
 }
