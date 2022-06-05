@@ -47,16 +47,7 @@ abstract class Caster
             : self::$casters[$propertyClassName];
 
         if (is_callable($casterClassNameOrCallable)) {
-            return new class($casterClassNameOrCallable) extends Caster {
-                public function __construct(private mixed $callable)
-                {
-                }
-
-                public function cast(mixed $value): mixed
-                {
-                    return ($this->callable)($value);
-                }
-            };
+            return self::handleCallableCaster($casterClassNameOrCallable);
         }
 
         if (! class_exists($casterClassNameOrCallable)) {
@@ -70,6 +61,20 @@ abstract class Caster
         }
 
         return $caster;
+    }
+
+    private static function handleCallableCaster($callable): Caster
+    {
+        return new class($callable) extends Caster {
+            public function __construct(private mixed $callable)
+            {
+            }
+
+            public function cast(mixed $value): mixed
+            {
+                return ($this->callable)($value);
+            }
+        };
     }
 
     abstract public function cast(mixed $value): mixed;
