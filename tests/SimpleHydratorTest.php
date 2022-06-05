@@ -134,6 +134,24 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('John', $person->first_name);
     }
 
+    public function testObjectCanSetValuesUsingSetter()
+    {
+        $person = Human::fromArray($this->data)->set('firstName', 'John');
+        $this->assertSame('John', $person->first_name);
+
+        $person = Human::fromArray($this->data)->set('FirstName', 'Dave');
+        $this->assertSame('Dave', $person->first_name);
+
+        $person = Human::fromArray($this->data)->set('First_Name', 'Pete');
+        $this->assertSame('Pete', $person->first_name);
+
+        $person = Human::fromArray($this->data)->set('First_name', 'Tony');
+        $this->assertSame('Tony', $person->first_name);
+
+        $person = Human::fromArray($this->data)->set('first_name', 'Steve');
+        $this->assertSame('Steve', $person->first_name);
+    }
+
     public function testObjectTypeError()
     {
         $this->expectException(TypeError::class);

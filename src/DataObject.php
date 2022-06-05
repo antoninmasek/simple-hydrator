@@ -18,7 +18,7 @@ class DataObject
         return Hydrator::hydrate(static::class, $data);
     }
 
-    public function __call($method, $arguments): self
+    public function set(string $propertyName, mixed $value): static
     {
         $reflectionClass = new ReflectionObject($this);
         $properties      = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -26,11 +26,16 @@ class DataObject
         foreach ($properties as $property) {
             $name = $property->getName();
 
-            if (Str::camel($name) === Str::camel($method)) {
-                $property->setValue($this, ...$arguments);
+            if (Str::camel($name) === Str::camel($propertyName)) {
+                $property->setValue($this, $value);
             }
         }
 
         return $this;
+    }
+
+    public function __call($method, $arguments): static
+    {
+        return $this->set($method, ...$arguments);
     }
 }
