@@ -2,6 +2,9 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use AntoninMasek\SimpleHydrator\Casters\AbstractCaster;
+use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
+use AntoninMasek\SimpleHydrator\Exceptions\UnknownCastException;
 use DateTime;
 use ReflectionObject;
 use ReflectionProperty;
@@ -23,10 +26,12 @@ abstract class Hydrator
                 : null;
 
             if (! $property->getType()->isBuiltin()) {
-                $value = match ($property->getType()->getName()) {
-                    DateTime::class => $value ? new DateTime($value) : null,
-                    default         => self::hydrate($property->getType()->getName(), $value),
-                };
+                try {
+                    $value = AbstractCaster::make($property)
+                        ->cast($value);
+                } catch (CasterException) {
+                    $value = self::hydrate($property->getType()->getName(), $value);
+                }
             }
 
             $property->setValue(
