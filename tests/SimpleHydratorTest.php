@@ -279,4 +279,36 @@ class SimpleHydratorTest extends TestCase
 
         $this->assertNull($camaro->keys);
     }
+
+    public function testRegisteredCastersAreUsedForCollections()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type'  => 'Camaro',
+            'keys'  => [
+                [
+                    'name'      => 'main',
+                    'is_active' => true,
+                ],
+                [
+                    'name'      => 'secondary',
+                    'is_active' => false,
+                ],
+            ],
+        ];
+
+        Caster::registerCaster(Key::class, function ($value) {
+            $key = new Key();
+
+            $key->name = 'overwritten';
+
+            return $key;
+        });
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertEquals('overwritten', $camaro->keys[0]->name);
+        $this->assertEquals('overwritten', $camaro->keys[1]->name);
+    }
 }

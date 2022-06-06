@@ -48,9 +48,11 @@ abstract class Hydrator
             $targetClassName = $attributes[0]->getArguments()[0];
 
             $value = array_map(function (mixed $item) use ($targetClassName) {
-                return is_array($item)
-                    ? self::hydrate($targetClassName, $item)
-                    : self::cast($targetClassName, $item);
+                if (Caster::existsFor($targetClassName) || ! is_array($item)) {
+                    return self::cast($targetClassName, $item);
+                }
+
+                return self::hydrate($targetClassName, $item);
             }, $value);
         }
 

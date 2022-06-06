@@ -34,6 +34,11 @@ abstract class Caster
         );
     }
 
+    public static function existsFor(string $className): bool
+    {
+        return array_key_exists($className, self::$casters);
+    }
+
     /**
      * @throws InvalidCasterException
      * @throws UnknownCasterException
