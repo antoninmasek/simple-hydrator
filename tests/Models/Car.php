@@ -3,6 +3,8 @@
 namespace AntoninMasek\SimpleHydrator\Tests\Models;
 
 use AntoninMasek\SimpleHydrator\Attributes\Collection;
+use DateTime;
+
 class Car
 {
     public string $type;
@@ -11,4 +13,7 @@ class Car
 
     #[Collection(Key::class)]
     public ?array $keys;
+
+    #[Collection(DateTime::class)]
+    public ?array $serviceAppointments;
 }

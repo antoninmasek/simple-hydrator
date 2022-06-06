@@ -250,6 +250,10 @@ class SimpleHydratorTest extends TestCase
                     'is_active' => false,
                 ],
             ],
+            'serviceAppointments' => [
+                '2022-06-01',
+                '2022-12-24',
+            ],
         ];
 
         /** @var Car $camaro */
@@ -257,6 +261,9 @@ class SimpleHydratorTest extends TestCase
 
         $this->assertInstanceOf(Key::class, $camaro->keys[0]);
         $this->assertInstanceOf(Key::class, $camaro->keys[1]);
+
+        $this->assertInstanceOf(DateTime::class, $camaro->serviceAppointments[0]);
+        $this->assertInstanceOf(DateTime::class, $camaro->serviceAppointments[1]);
     }
 
     public function testCastedCollectionOfObjectsCanBeSetToNull()
