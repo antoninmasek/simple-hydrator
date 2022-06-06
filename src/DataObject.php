@@ -2,6 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use AntoninMasek\SimpleHydrator\Support\Str;
 use ReflectionObject;
 use ReflectionProperty;
 
@@ -17,19 +18,25 @@ class DataObject
         return Hydrator::hydrate(static::class, $data);
     }
 
-    public function __call($method, $arguments): self
+    public function set(string $propertyName, mixed $value): static
     {
-        $reflectionClass = new ReflectionObject($this);
+        $clone           = clone $this;
+        $reflectionClass = new ReflectionObject($clone);
         $properties      = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($properties as $property) {
             $name = $property->getName();
 
-            if (Helper::camel($name) === Helper::camel($method)) {
-                $property->setValue($this, ...$arguments);
+            if (Str::camel($name) === Str::camel($propertyName)) {
+                $property->setValue($clone, $value);
             }
         }
 
-        return $this;
+        return $clone;
+    }
+
+    public function __call($method, $arguments): static
+    {
+        return $this->set($method, ...$arguments);
     }
 }
