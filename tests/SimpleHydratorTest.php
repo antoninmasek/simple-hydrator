@@ -9,6 +9,7 @@ use AntoninMasek\SimpleHydrator\Tests\Casters\TestingCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Car;
 use AntoninMasek\SimpleHydrator\Tests\Models\ClassThatNeedsCustomCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
+use AntoninMasek\SimpleHydrator\Tests\Models\Key;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use TypeError;
@@ -232,5 +233,82 @@ class SimpleHydratorTest extends TestCase
         $this->assertEquals(1969, $person->dateOfBirth->format('Y'));
         $this->assertEquals(07, $person->dateOfBirth->format('m'));
         $this->assertEquals(20, $person->dateOfBirth->format('d'));
+    }
+
+    public function testCastACollectionOfObjects()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type'  => 'Camaro',
+            'keys'  => [
+                [
+                    'name'      => 'main',
+                    'is_active' => true,
+                ],
+                [
+                    'name'      => 'secondary',
+                    'is_active' => false,
+                ],
+            ],
+            'serviceAppointments' => [
+                '2022-06-01',
+                '2022-12-24',
+            ],
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertInstanceOf(Key::class, $camaro->keys[0]);
+        $this->assertInstanceOf(Key::class, $camaro->keys[1]);
+
+        $this->assertInstanceOf(DateTime::class, $camaro->serviceAppointments[0]);
+        $this->assertInstanceOf(DateTime::class, $camaro->serviceAppointments[1]);
+    }
+
+    public function testCastedCollectionOfObjectsCanBeSetToNull()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type'  => 'Camaro',
+            'keys'  => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertNull($camaro->keys);
+    }
+
+    public function testRegisteredCastersAreUsedForCollections()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type'  => 'Camaro',
+            'keys'  => [
+                [
+                    'name'      => 'main',
+                    'is_active' => true,
+                ],
+                [
+                    'name'      => 'secondary',
+                    'is_active' => false,
+                ],
+            ],
+        ];
+
+        Caster::registerCaster(Key::class, function ($value) {
+            $key = new Key();
+
+            $key->name = 'overwritten';
+
+            return $key;
+        });
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertEquals('overwritten', $camaro->keys[0]->name);
+        $this->assertEquals('overwritten', $camaro->keys[1]->name);
     }
 }
