@@ -2,6 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use AntoninMasek\SimpleHydrator\Attributes\Collection;
 use AntoninMasek\SimpleHydrator\Casters\Caster;
 use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
 use AntoninMasek\SimpleHydrator\Exceptions\UnknownCasterException;
@@ -23,6 +24,12 @@ abstract class Hydrator
             $value = array_key_exists($property->getName(), $data)
                 ? $data[$property->getName()]
                 : null;
+
+            if (($attributes = $property->getAttributes(Collection::class)) && is_array($value)) {
+                $value = array_map(function (mixed $item) use ($attributes) {
+                    return self::hydrate($attributes[0]->getArguments()[0], $item);
+                }, $value);
+            }
 
             if ($property->getType()->isBuiltin()) {
                 $property->setValue($dto, $value);
