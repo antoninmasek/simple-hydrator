@@ -48,6 +48,38 @@ $human = Human::fromArray($data);
 Main advantage is autocompletion as well as better readability. Disadvantage is, that you have to extend your data
 object. At least the parent. Nested object does not have to extend anything.
 
+### Collections
+If you find yourself in a scenario, where you'd have let's say a `Car` object that has many `Key` objects:
+```php
+$car = [
+    'brand' => 'Chevrolet',
+    'type'  => 'Camaro',
+    'keys'  => [
+        [
+            'name'      => 'main',
+            'is_active' => true,
+        ],
+        [
+            'name'      => 'secondary',
+            'is_active' => false,
+        ],
+    ],
+];
+```
+And you need to cast each of the `keys` to a `Key` object, you may add `#[Collection(Key::class)]` attribute to your data object definition as such:
+```php
+class Car
+{
+    public string $type;
+    public string $brand;
+    public ?ClassThatNeedsCustomCaster $customCaster;
+
+    #[Collection(Key::class)]
+    public ?array $keys;
+}
+```
+This ensures correct casting and you will end up with an array of `Key` objects.
+
 ### DTO Making
 
 For each of your DTO's properties you can use either a camelCase or snake_case approach to set their values which ever
