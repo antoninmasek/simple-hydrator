@@ -4,6 +4,7 @@ namespace AntoninMasek\SimpleHydrator\Tests;
 
 use AntoninMasek\SimpleHydrator\Casters\Caster;
 use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
+use AntoninMasek\SimpleHydrator\Exceptions\InvalidInputDataException;
 use AntoninMasek\SimpleHydrator\Hydrator;
 use AntoninMasek\SimpleHydrator\Tests\Casters\TestingCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Car;
@@ -314,5 +315,53 @@ class SimpleHydratorTest extends TestCase
 
         $this->assertEquals('overwritten', $camaro->keys[0]->name);
         $this->assertEquals('overwritten', $camaro->keys[1]->name);
+    }
+
+    public function testItIsPossibleToParseAListArray()
+    {
+        $array = [
+            $this->data,
+            [
+                'name'        => 'Jane',
+                'kids'        => 0,
+                'dateOfBirth' => '1969-08-19',
+                'money'       => 35.3,
+                'male'        => true,
+                'items'       => ['phone', 'wallet', 'keys'],
+                'car'         => null,
+            ],
+        ];
+
+        $persons = Human::collectionFromArray($array);
+
+        $this->assertCount(2, $persons);
+        $this->assertEquals('Jane', $persons[1]->name);
+    }
+
+    public function testItThrowsExceptionWhenListIsUsedWithFromArrayMethod()
+    {
+        $array = [
+            $this->data,
+            [
+                'name'        => 'Jane',
+                'kids'        => 0,
+                'dateOfBirth' => '1969-08-19',
+                'money'       => 35.3,
+                'male'        => true,
+                'items'       => ['phone', 'wallet', 'keys'],
+                'car'         => null,
+            ],
+        ];
+
+        $this->expectException(InvalidInputDataException::class);
+
+        Human::fromArray($array);
+    }
+
+    public function testItThrowsExceptionWhenAssociativeArrayIsUsedWithCollectionFromArrayMethod()
+    {
+        $this->expectException(InvalidInputDataException::class);
+
+        Human::collectionFromArray($this->data);
     }
 }

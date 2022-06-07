@@ -2,6 +2,8 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use AntoninMasek\SimpleHydrator\Exceptions\InvalidInputDataException;
+use AntoninMasek\SimpleHydrator\Support\Arr;
 use AntoninMasek\SimpleHydrator\Support\Str;
 use ReflectionObject;
 use ReflectionProperty;
@@ -13,9 +15,36 @@ class DataObject
         return new static(...$arguments);
     }
 
+    /**
+     * @throws InvalidInputDataException
+     * @throws Exceptions\CasterException
+     * @throws Exceptions\InvalidCasterException
+     */
     public static function fromArray(array $data = null): ?static
     {
+        if (Arr::isList($data)) {
+            throw InvalidInputDataException::unexpectedArrayList();
+        }
+
         return Hydrator::hydrate(static::class, $data);
+    }
+
+    /**
+     * @throws InvalidInputDataException
+     * @throws Exceptions\CasterException
+     * @throws Exceptions\InvalidCasterException
+     *
+     * @return array<static>|null
+     */
+    public static function collectionFromArray(array $data = []): ?array
+    {
+        if (Arr::isAssoc($data)) {
+            throw InvalidInputDataException::unexpectedAssociativeArray();
+        }
+
+        return array_map(function ($value) {
+            return static::fromArray((array) $value);
+        }, $data);
     }
 
     public function set(string $propertyName, mixed $value): static
