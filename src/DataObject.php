@@ -2,6 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator;
 
+use AntoninMasek\SimpleHydrator\Support\Arr;
 use AntoninMasek\SimpleHydrator\Support\Str;
 use ReflectionObject;
 use ReflectionProperty;
@@ -13,9 +14,15 @@ class DataObject
         return new static(...$arguments);
     }
 
-    public static function fromArray(array $data = null): ?static
+    public static function fromArray(array $data = null): array|null|static
     {
-        return Hydrator::hydrate(static::class, $data);
+        if (! Arr::isList($data)) {
+            return Hydrator::hydrate(static::class, $data);
+        }
+
+        return Arr::map($data, function ($value) {
+            return static::fromArray((array) $value);
+        });
     }
 
     public function set(string $propertyName, mixed $value): static

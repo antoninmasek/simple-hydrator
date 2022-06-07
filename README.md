@@ -68,6 +68,8 @@ $car = [
 ```
 And you need to cast each of the `keys` to a `Key` object, you may add `#[Collection(Key::class)]` attribute to your data object definition as such:
 ```php
+use AntoninMasek\SimpleHydrator\Attributes\Collection;
+
 class Car
 {
     public string $type;

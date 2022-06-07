@@ -311,4 +311,25 @@ class SimpleHydratorTest extends TestCase
         $this->assertEquals('overwritten', $camaro->keys[0]->name);
         $this->assertEquals('overwritten', $camaro->keys[1]->name);
     }
+
+    public function testItIsPossibleToParseAListArray()
+    {
+        $array = [
+            $this->data,
+            [
+                'name'        => 'Jane',
+                'kids'        => 0,
+                'dateOfBirth' => '1969-08-19',
+                'money'       => 35.3,
+                'male'        => true,
+                'items'       => ['phone', 'wallet', 'keys'],
+                'car'         => null,
+            ],
+        ];
+
+        $persons = Human::fromArray($array);
+
+        $this->assertCount(2, $persons);
+        $this->assertEquals('Jane', $persons[1]->name);
+    }
 }
