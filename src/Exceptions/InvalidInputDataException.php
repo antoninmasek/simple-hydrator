@@ -2,7 +2,6 @@
 
 namespace AntoninMasek\SimpleHydrator\Exceptions;
 
-use AntoninMasek\SimpleHydrator\Casters\Caster;
 use Exception;
 
 class InvalidInputDataException extends Exception
