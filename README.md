@@ -82,6 +82,9 @@ class Car
 ```
 This ensures correct casting and you will end up with an array of `Key` objects.
 
+#### Your root array is list of objects
+If your source array is a list of objects and you just want to cast it, then instead of the `fromArray` method you may use `collectionFromArray`
+
 ### DTO Making
 
 For each of your DTO's properties you can use either a camelCase or snake_case approach to set their values which ever
@@ -92,6 +95,14 @@ $person = Human::make()
     ->firstName('John')
     ->lastName('Doe')
     ->kids(3);
+```
+
+If you prefer to persist autocompletion you may also use `set` method, where the first argument is property name and the second one is the value. So to replicate the example above:
+```php
+$person = Human::make()
+    ->set('firstName', 'John')
+    ->set('lastName', 'Doe')
+    ->set('kids', 3);
 ```
 
 ### Casters
