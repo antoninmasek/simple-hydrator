@@ -224,6 +224,10 @@ class SimpleHydratorTest extends TestCase
         $this->assertNotEquals(20, $person->dateOfBirth->format('d'));
 
         Caster::registerCaster(DateTime::class, function ($value) {
+            if (is_null($value)) {
+                return null;
+            }
+
             return (new DateTime())->setTimestamp($value);
         });
 
