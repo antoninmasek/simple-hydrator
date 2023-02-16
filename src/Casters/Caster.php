@@ -48,7 +48,7 @@ abstract class Caster
     public static function make(string $className): Caster
     {
         $casterClassNameOrCallable = ! array_key_exists($className, self::$casters)
-            ? self::CASTERS_NAMESPACE."\\$className".self::CASTERS_SUFFIX
+            ? self::CASTERS_NAMESPACE . "\\$className" . self::CASTERS_SUFFIX
             : self::$casters[$className];
 
         if (is_callable($casterClassNameOrCallable)) {
@@ -70,8 +70,7 @@ abstract class Caster
 
     private static function handleCallableCaster($callable): Caster
     {
-        return new class($callable) extends Caster
-        {
+        return new class($callable) extends Caster {
             public function __construct(private mixed $callable)
             {
             }
