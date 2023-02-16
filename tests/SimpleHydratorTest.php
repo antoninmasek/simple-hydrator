@@ -12,6 +12,7 @@ use AntoninMasek\SimpleHydrator\Tests\Models\ClassThatNeedsCustomCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
 use AntoninMasek\SimpleHydrator\Tests\Models\Key;
 use DateTime;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use TypeError;
 
@@ -219,11 +220,6 @@ class SimpleHydratorTest extends TestCase
         $data                = $this->data;
         $data['dateOfBirth'] = -14256000;
 
-        $person = Human::fromArray($data);
-        $this->assertNotEquals(1969, $person->dateOfBirth->format('Y'));
-        $this->assertNotEquals(07, $person->dateOfBirth->format('m'));
-        $this->assertNotEquals(20, $person->dateOfBirth->format('d'));
-
         Caster::registerCaster(DateTime::class, function ($value) {
             if (is_null($value)) {
                 return null;
@@ -233,11 +229,15 @@ class SimpleHydratorTest extends TestCase
         });
 
         $person = Human::fromArray($data);
-
         $this->assertTrue($person->dateOfBirth instanceof DateTime);
         $this->assertEquals(1969, $person->dateOfBirth->format('Y'));
         $this->assertEquals(07, $person->dateOfBirth->format('m'));
         $this->assertEquals(20, $person->dateOfBirth->format('d'));
+
+        Caster::clearCasters();
+
+        $this->expectException(Exception::class);
+        Human::fromArray($data);
     }
 
     public function testCastACollectionOfObjects()
