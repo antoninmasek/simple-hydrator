@@ -8,7 +8,9 @@ use DateTime;
 class Car
 {
     public string $type;
+
     public string $brand;
+
     public ?ClassThatNeedsCustomCaster $customCaster;
 
     #[Collection(Key::class)]
