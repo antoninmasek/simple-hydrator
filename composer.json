@@ -16,7 +16,7 @@
     "homepage": "https://github.com/antoninmasek/simple-hydrator",
     "require": {
         "php": "^8.0|^8.1",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^10.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
