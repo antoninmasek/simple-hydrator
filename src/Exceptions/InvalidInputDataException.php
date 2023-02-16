@@ -2,9 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator\Exceptions;
 
-use Exception;
-
-class InvalidInputDataException extends Exception
+class InvalidInputDataException extends \Exception
 {
     public static function unexpectedArrayList(): static
     {

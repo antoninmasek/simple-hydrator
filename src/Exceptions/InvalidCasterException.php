@@ -3,9 +3,8 @@
 namespace AntoninMasek\SimpleHydrator\Exceptions;
 
 use AntoninMasek\SimpleHydrator\Casters\Caster;
-use Exception;
 
-class InvalidCasterException extends Exception
+class InvalidCasterException extends \Exception
 {
     public function __construct()
     {

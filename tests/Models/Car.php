@@ -14,6 +14,6 @@ class Car
     #[Collection(Key::class)]
     public ?array $keys;
 
-    #[Collection(DateTime::class)]
+    #[Collection(\DateTime::class)]
     public ?array $serviceAppointments;
 }

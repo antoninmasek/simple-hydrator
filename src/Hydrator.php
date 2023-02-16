@@ -6,8 +6,6 @@ use AntoninMasek\SimpleHydrator\Attributes\Collection;
 use AntoninMasek\SimpleHydrator\Casters\Caster;
 use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
 use AntoninMasek\SimpleHydrator\Exceptions\UnknownCasterException;
-use ReflectionObject;
-use ReflectionProperty;
 
 abstract class Hydrator
 {
@@ -21,8 +19,8 @@ abstract class Hydrator
             return null;
         }
 
-        $reflectionClass  = new ReflectionObject($dto = new $className());
-        $publicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
+        $reflectionClass  = new \ReflectionObject($dto = new $className());
+        $publicProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
             $value = array_key_exists($property->getName(), $data)
@@ -42,7 +40,7 @@ abstract class Hydrator
      * @throws CasterException
      * @throws Exceptions\InvalidCasterException
      */
-    private static function hydrateProperty(ReflectionProperty $property, mixed $value): mixed
+    private static function hydrateProperty(\ReflectionProperty $property, mixed $value): mixed
     {
         if (($attributes = $property->getAttributes(Collection::class)) && is_array($value)) {
             $targetClassName = $attributes[0]->getArguments()[0];

@@ -2,9 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator\Exceptions;
 
-use Exception;
-
-class UnknownCasterException extends Exception
+class UnknownCasterException extends \Exception
 {
     public function __construct(string $className)
     {

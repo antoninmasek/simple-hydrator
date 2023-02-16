@@ -11,10 +11,7 @@ use AntoninMasek\SimpleHydrator\Tests\Models\Car;
 use AntoninMasek\SimpleHydrator\Tests\Models\ClassThatNeedsCustomCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
 use AntoninMasek\SimpleHydrator\Tests\Models\Key;
-use DateTime;
-use Exception;
 use PHPUnit\Framework\TestCase;
-use TypeError;
 
 class SimpleHydratorTest extends TestCase
 {
@@ -54,7 +51,7 @@ class SimpleHydratorTest extends TestCase
 
         $this->assertSame('John', $person->name);
         $this->assertSame(0, $person->kids);
-        $this->assertTrue($person->dateOfBirth instanceof DateTime);
+        $this->assertTrue($person->dateOfBirth instanceof \DateTime);
         $this->assertSame(33.3, $person->money);
         $this->assertSame(true, $person->male);
         $this->assertCount(3, $person->items);
@@ -171,7 +168,7 @@ class SimpleHydratorTest extends TestCase
 
     public function testObjectTypeError()
     {
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         $person = Human::make()->dateOfBirth('test');
     }
@@ -193,7 +190,7 @@ class SimpleHydratorTest extends TestCase
 
         $class = Hydrator::hydrate(Car::class, $data);
 
-        $expectedValue = floatval((new DateTime())->format('n')) + 36;
+        $expectedValue = floatval((new \DateTime())->format('n')) + 36;
         $this->assertSame($expectedValue, $class->customCaster->value);
     }
 
@@ -204,14 +201,14 @@ class SimpleHydratorTest extends TestCase
         Caster::registerCaster(ClassThatNeedsCustomCaster::class, function ($value) {
             $class = new ClassThatNeedsCustomCaster();
 
-            $class->value = floatval((new DateTime())->format('n')) + $value;
+            $class->value = floatval((new \DateTime())->format('n')) + $value;
 
             return $class;
         });
 
         $class = Hydrator::hydrate(Car::class, $data);
 
-        $expectedValue = floatval((new DateTime())->format('n')) + 36;
+        $expectedValue = floatval((new \DateTime())->format('n')) + 36;
         $this->assertSame($expectedValue, $class->customCaster->value);
     }
 
@@ -220,23 +217,23 @@ class SimpleHydratorTest extends TestCase
         $data                = $this->data;
         $data['dateOfBirth'] = -14256000;
 
-        Caster::registerCaster(DateTime::class, function ($value) {
+        Caster::registerCaster(\DateTime::class, function ($value) {
             if (is_null($value)) {
                 return null;
             }
 
-            return (new DateTime())->setTimestamp($value);
+            return (new \DateTime())->setTimestamp($value);
         });
 
         $person = Human::fromArray($data);
-        $this->assertTrue($person->dateOfBirth instanceof DateTime);
+        $this->assertTrue($person->dateOfBirth instanceof \DateTime);
         $this->assertEquals(1969, $person->dateOfBirth->format('Y'));
         $this->assertEquals(07, $person->dateOfBirth->format('m'));
         $this->assertEquals(20, $person->dateOfBirth->format('d'));
 
         Caster::clearCasters();
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         Human::fromArray($data);
     }
 
@@ -267,8 +264,8 @@ class SimpleHydratorTest extends TestCase
         $this->assertInstanceOf(Key::class, $camaro->keys[0]);
         $this->assertInstanceOf(Key::class, $camaro->keys[1]);
 
-        $this->assertInstanceOf(DateTime::class, $camaro->serviceAppointments[0]);
-        $this->assertInstanceOf(DateTime::class, $camaro->serviceAppointments[1]);
+        $this->assertInstanceOf(\DateTime::class, $camaro->serviceAppointments[0]);
+        $this->assertInstanceOf(\DateTime::class, $camaro->serviceAppointments[1]);
     }
 
     public function testCastedCollectionOfObjectsCanBeSetToNull()

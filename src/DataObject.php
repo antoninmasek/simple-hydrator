@@ -5,8 +5,6 @@ namespace AntoninMasek\SimpleHydrator;
 use AntoninMasek\SimpleHydrator\Exceptions\InvalidInputDataException;
 use AntoninMasek\SimpleHydrator\Support\Arr;
 use AntoninMasek\SimpleHydrator\Support\Str;
-use ReflectionObject;
-use ReflectionProperty;
 
 class DataObject
 {
@@ -30,11 +28,11 @@ class DataObject
     }
 
     /**
+     * @return array<static>|null
+     *
      * @throws InvalidInputDataException
      * @throws Exceptions\CasterException
      * @throws Exceptions\InvalidCasterException
-     *
-     * @return array<static>|null
      */
     public static function collectionFromArray(array $data = []): ?array
     {
@@ -50,8 +48,8 @@ class DataObject
     public function set(string $propertyName, mixed $value): static
     {
         $clone           = clone $this;
-        $reflectionClass = new ReflectionObject($clone);
-        $properties      = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
+        $reflectionClass = new \ReflectionObject($clone);
+        $properties      = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         foreach ($properties as $property) {
             $name = $property->getName();

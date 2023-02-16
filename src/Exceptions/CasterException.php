@@ -2,9 +2,7 @@
 
 namespace AntoninMasek\SimpleHydrator\Exceptions;
 
-use Exception;
-
-class CasterException extends Exception
+class CasterException extends \Exception
 {
     public static function invalidValue(string $className, mixed $value): static
     {
