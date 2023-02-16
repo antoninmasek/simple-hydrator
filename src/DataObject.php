@@ -47,9 +47,9 @@ class DataObject
 
     public function set(string $propertyName, mixed $value): static
     {
-        $clone           = clone $this;
+        $clone = clone $this;
         $reflectionClass = new \ReflectionObject($clone);
-        $properties      = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         foreach ($properties as $property) {
             $name = $property->getName();

@@ -24,21 +24,21 @@ class SimpleHydratorTest extends TestCase
         Caster::clearCasters();
 
         $this->data = [
-            'name'        => 'John',
-            'kids'        => 0,
+            'name' => 'John',
+            'kids' => 0,
             'dateOfBirth' => '1969-07-20',
-            'money'       => 33.3,
-            'male'        => true,
-            'items'       => ['phone', 'wallet', 'keys'],
-            'car'         => null,
-            'mother'      => [
-                'name'  => 'Jane',
-                'kids'  => 2,
+            'money' => 33.3,
+            'male' => true,
+            'items' => ['phone', 'wallet', 'keys'],
+            'car' => null,
+            'mother' => [
+                'name' => 'Jane',
+                'kids' => 2,
                 'money' => 66.6,
-                'male'  => false,
+                'male' => false,
                 'items' => ['phone', 'keys'],
-                'car'   => [
-                    'type'  => '911',
+                'car' => [
+                    'type' => '911',
                     'brand' => 'Porsche',
                 ],
             ],
@@ -214,7 +214,7 @@ class SimpleHydratorTest extends TestCase
 
     public function testItIsPossibleToOverwriteDefaultCaster()
     {
-        $data                = $this->data;
+        $data = $this->data;
         $data['dateOfBirth'] = -14256000;
 
         Caster::registerCaster(\DateTime::class, function ($value) {
@@ -241,14 +241,14 @@ class SimpleHydratorTest extends TestCase
     {
         $data = [
             'brand' => 'Chevrolet',
-            'type'  => 'Camaro',
-            'keys'  => [
+            'type' => 'Camaro',
+            'keys' => [
                 [
-                    'name'      => 'main',
+                    'name' => 'main',
                     'is_active' => true,
                 ],
                 [
-                    'name'      => 'secondary',
+                    'name' => 'secondary',
                     'is_active' => false,
                 ],
             ],
@@ -272,8 +272,8 @@ class SimpleHydratorTest extends TestCase
     {
         $data = [
             'brand' => 'Chevrolet',
-            'type'  => 'Camaro',
-            'keys'  => null,
+            'type' => 'Camaro',
+            'keys' => null,
         ];
 
         /** @var Car $camaro */
@@ -286,14 +286,14 @@ class SimpleHydratorTest extends TestCase
     {
         $data = [
             'brand' => 'Chevrolet',
-            'type'  => 'Camaro',
-            'keys'  => [
+            'type' => 'Camaro',
+            'keys' => [
                 [
-                    'name'      => 'main',
+                    'name' => 'main',
                     'is_active' => true,
                 ],
                 [
-                    'name'      => 'secondary',
+                    'name' => 'secondary',
                     'is_active' => false,
                 ],
             ],
@@ -319,13 +319,13 @@ class SimpleHydratorTest extends TestCase
         $array = [
             $this->data,
             [
-                'name'        => 'Jane',
-                'kids'        => 0,
+                'name' => 'Jane',
+                'kids' => 0,
                 'dateOfBirth' => '1969-08-19',
-                'money'       => 35.3,
-                'male'        => true,
-                'items'       => ['phone', 'wallet', 'keys'],
-                'car'         => null,
+                'money' => 35.3,
+                'male' => true,
+                'items' => ['phone', 'wallet', 'keys'],
+                'car' => null,
             ],
         ];
 
@@ -340,13 +340,13 @@ class SimpleHydratorTest extends TestCase
         $array = [
             $this->data,
             [
-                'name'        => 'Jane',
-                'kids'        => 0,
+                'name' => 'Jane',
+                'kids' => 0,
                 'dateOfBirth' => '1969-08-19',
-                'money'       => 35.3,
-                'male'        => true,
-                'items'       => ['phone', 'wallet', 'keys'],
-                'car'         => null,
+                'money' => 35.3,
+                'male' => true,
+                'items' => ['phone', 'wallet', 'keys'],
+                'car' => null,
             ],
         ];
 
