@@ -21,7 +21,7 @@ abstract class Hydrator
             return null;
         }
 
-        $data = Arr::mapKeys($data, function($key) {
+        $data = Arr::mapKeys($data, function ($key) {
             return Str::removeSpaces($key);
         });
 
@@ -29,7 +29,7 @@ abstract class Hydrator
         $publicProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
-            $value = array_key_exists($property->getName(),$data)
+            $value = array_key_exists($property->getName(), $data)
                 ? $data[$property->getName()]
                 : null;
 

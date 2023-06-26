@@ -36,7 +36,7 @@ class Arr
      */
     public static function mapKeys(array $array, Closure $callback): array
     {
-        $newKeys =  array_map(
+        $newKeys = array_map(
             $callback,
             array_keys($array),
             $array,
