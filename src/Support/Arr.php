@@ -2,6 +2,8 @@
 
 namespace AntoninMasek\SimpleHydrator\Support;
 
+use Closure;
+
 /**
  * https://github.com/laravel/framework/blob/9.x/src/Illuminate/Collections/Arr.php.
  */
@@ -27,5 +29,19 @@ class Arr
     public static function isList(array $array): bool
     {
         return ! self::isAssoc($array);
+    }
+
+    /**
+     * Maps the keys of the array
+     */
+    public static function mapKeys(array $array, Closure $callback): array
+    {
+        $newKeys =  array_map(
+            $callback,
+            array_keys($array),
+            $array,
+        );
+
+        return array_combine($newKeys, $array);
     }
 }

@@ -6,6 +6,8 @@ use AntoninMasek\SimpleHydrator\Attributes\Collection;
 use AntoninMasek\SimpleHydrator\Casters\Caster;
 use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
 use AntoninMasek\SimpleHydrator\Exceptions\UnknownCasterException;
+use AntoninMasek\SimpleHydrator\Support\Arr;
+use AntoninMasek\SimpleHydrator\Support\Str;
 
 abstract class Hydrator
 {
@@ -19,11 +21,15 @@ abstract class Hydrator
             return null;
         }
 
+        $data = Arr::mapKeys($data, function($key) {
+            return Str::removeSpaces($key);
+        });
+
         $reflectionClass = new \ReflectionObject($dto = new $className());
         $publicProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
-            $value = array_key_exists($property->getName(), $data)
+            $value = array_key_exists($property->getName(),$data)
                 ? $data[$property->getName()]
                 : null;
 

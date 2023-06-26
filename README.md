@@ -13,6 +13,23 @@ Also, the main objective for me was, to scratch my own itch. So even though the 
 possibly contains some issues, for me, it is currently doing the job just fine. If you, however, find yourself using it
 too and find an issue, feel free to PR it :)
 
+### TLDR
+
+This package helps you create objects from arrays like this:
+
+```php
+$data = ['name' => 'John', 'age' => 42];
+
+class Human extends \AntoninMasek\SimpleHydrator\DataObject
+{
+    public string $name;
+    
+    public int $age;
+}
+
+Human::fromArray($data);
+```
+
 ## Installation
 
 You can install the package via composer:
@@ -49,7 +66,9 @@ Main advantage is autocompletion as well as better readability. Disadvantage is,
 object. At least the parent. Nested object does not have to extend anything.
 
 ### Collections
+
 If you find yourself in a scenario, where you'd have let's say a `Car` object that has many `Key` objects:
+
 ```php
 $car = [
     'brand' => 'Chevrolet',
@@ -66,7 +85,10 @@ $car = [
     ],
 ];
 ```
-And you need to cast each of the `keys` to a `Key` object, you may add `#[Collection(Key::class)]` attribute to your data object definition as such:
+
+And you need to cast each of the `keys` to a `Key` object, you may add `#[Collection(Key::class)]` attribute to your
+data object definition as such:
+
 ```php
 use AntoninMasek\SimpleHydrator\Attributes\Collection;
 
@@ -80,10 +102,13 @@ class Car
     public ?array $keys;
 }
 ```
+
 This ensures correct casting and you will end up with an array of `Key` objects.
 
 #### Your root array is list of objects
-If your source array is a list of objects and you just want to cast it, then instead of the `fromArray` method you may use `collectionFromArray`
+
+If your source array is a list of objects and you just want to cast it, then instead of the `fromArray` method you may
+use `collectionFromArray`
 
 ### DTO Making
 
@@ -97,7 +122,9 @@ $person = Human::make()
     ->kids(3);
 ```
 
-If you prefer to persist autocompletion you may also use `set` method, where the first argument is property name and the second one is the value. So to replicate the example above:
+If you prefer to persist autocompletion you may also use `set` method, where the first argument is property name and the
+second one is the value. So to replicate the example above:
+
 ```php
 $person = Human::make()
     ->set('firstName', 'John')
@@ -108,11 +135,12 @@ $person = Human::make()
 ### Casters
 
 For cases, where the type of property isn't built in PHP, or it needs a special care than just try to fill properties
-by name it is possible to write a caster. 
+by name it is possible to write a caster.
 
 #### Caster class
 
-The first way to define a caster is to create a class, that extends `AntoninMasek\SimpleHydrator\Casters\Caster`. You only need to implement the `cast` method which is supplied
+The first way to define a caster is to create a class, that extends `AntoninMasek\SimpleHydrator\Casters\Caster`. You
+only need to implement the `cast` method which is supplied
 with `$value` parameter that contains the raw data from the input array, that should be used to hydrate this class.
 
 As an example take a look at simple `DateTime` caster:
@@ -131,10 +159,13 @@ class DateTimeCaster extends Caster
 }
 ```
 
-It expects the `$value` to be a string in valid date format. For example `1969-07-20` and returns a `DateTime` object with this date.
+It expects the `$value` to be a string in valid date format. For example `1969-07-20` and returns a `DateTime` object
+with this date.
 
 #### Anonymous caster
-If you don't want to create a caster class you can create anonymous caster by supplying a closure instead of a caster class.
+
+If you don't want to create a caster class you can create anonymous caster by supplying a closure instead of a caster
+class.
 
 ```php
 Caster::registerCaster(DateTime::class, function ($value) {
@@ -147,7 +178,9 @@ Caster::registerCaster(DateTime::class, function ($value) {
 ```
 
 #### Registering casters
+
 You can register casters in two ways. First is to specify the mapping between all classes and their respective casters:
+
 ```php
 Caster::setCasters([
     YourObject::class => YourObjectCaster::class,
@@ -156,18 +189,29 @@ Caster::setCasters([
 ```
 
 Or just specify one caster at a time:
+
 ```php
 Caster::registerCaster(YourObject::class, YourObjectCaster::class);
 ```
 
 To clear all caster you may use:
+
 ```php
 Caster::clearCasters();
 ```
 
 #### Overwriting default casters
-If any of the default casters in the package does not suit your needs you can easily overwrite it. All you need to do is register your caster for the specific class.
-Registered casters have higher priority and default casters in the package are used if no mapping for the specific class is supplied.
+
+If any of the default casters in the package does not suit your needs you can easily overwrite it. All you need to do is
+register your caster for the specific class.
+Registered casters have higher priority and default casters in the package are used if no mapping for the specific class
+is supplied.
+
+## Notes
+
+* Please note, that since version `1.0.0` any spaces in array keys are ignored. That means that for the following
+  array `$data = ['service Appointments' => ['2022-06-01']]` the `service Appointments` key will be set
+  to `serviceAppointments` object property
 
 ## Testing
 

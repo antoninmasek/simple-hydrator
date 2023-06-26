@@ -12,4 +12,9 @@ final class Str
 
         return lcfirst($words);
     }
+
+    public static function removeSpaces($value): ?string
+    {
+        return str_replace(' ', '', $value);
+    }
 }

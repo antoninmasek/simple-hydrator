@@ -173,6 +173,15 @@ class SimpleHydratorTest extends TestCase
         $person = Human::make()->dateOfBirth('test');
     }
 
+    public function testItIgnoresWhiteSpacesInPropertyNames()
+    {
+        $data = ['brand' => 'Ford', 'type' => 'Mustang', 'service Appointments' => ['2022-06-01']];
+
+        $car = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertInstanceOf(\DateTime::class, $car->serviceAppointments[0]);
+    }
+
     public function testItFailsWithoutCustomCaster()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
