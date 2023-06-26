@@ -13,8 +13,8 @@ final class Str
         return lcfirst($words);
     }
 
-    public static function removeSpaces($value): ?string
+    public static function removeInvalidCharacters($value): ?string
     {
-        return str_replace(' ', '', $value);
+        return preg_replace('/[^a-zA-Z0-9_]/', '', $value);
     }
 }

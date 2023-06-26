@@ -209,9 +209,11 @@ is supplied.
 
 ## Notes
 
-* Please note, that since version `1.0.0` any spaces in array keys are ignored. That means that for the following
-  array `$data = ['service Appointments' => ['2022-06-01']]` the `service Appointments` key will be set
+* Please note, that since version `1.0.1` any invalid characters in array keys are ignored. That means that for the following
+  array `$data = ['service (Appointments)' => ['2022-06-01']]` the `service (Appointments)` key will be set
   to `serviceAppointments` object property
+
+> Valid characters are the ones, that will pass the following regex: `[^a-zA-Z0-9_]`
 
 ## Testing
 

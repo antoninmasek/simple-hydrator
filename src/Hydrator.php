@@ -22,7 +22,7 @@ abstract class Hydrator
         }
 
         $data = Arr::mapKeys($data, function ($key) {
-            return Str::removeSpaces($key);
+            return Str::removeInvalidCharacters($key);
         });
 
         $reflectionClass = new \ReflectionObject($dto = new $className());
