@@ -11,6 +11,8 @@ class Car
 
     public string $brand;
 
+    public ?Color $color;
+
     public ?ClassThatNeedsCustomCaster $customCaster;
 
     #[Collection(Key::class)]
