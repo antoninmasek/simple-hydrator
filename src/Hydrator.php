@@ -29,9 +29,9 @@ abstract class Hydrator
         $publicProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
-            $value = array_key_exists($property->getName(), $data)
-                ? $data[$property->getName()]
-                : null;
+            $value = ! array_key_exists($property->getName(), $data)
+                ? $property->getDefaultValue()
+                : $data[$property->getName()];
 
             $property->setValue(
                 $dto,

@@ -13,6 +13,8 @@ class Car
 
     public ?Color $color;
 
+    public ?int $maxSpeed = 120;
+
     public ?ClassThatNeedsCustomCaster $customCaster;
 
     #[Collection(Key::class)]

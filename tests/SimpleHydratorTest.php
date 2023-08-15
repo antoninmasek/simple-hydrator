@@ -432,4 +432,48 @@ class SimpleHydratorTest extends TestCase
 
         $this->assertNull($camaro->color);
     }
+
+    public function testItHonorsDefaultValue()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type' => 'Camaro',
+            'keys' => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertSame(120, $camaro->maxSpeed);
+    }
+
+    public function testItCanOverwritesDefaultValue()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type' => 'Camaro',
+            'maxSpeed' => 250,
+            'keys' => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertSame(250, $camaro->maxSpeed);
+    }
+
+    public function testItCanOverwritesDefaultValueWithNull()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'type' => 'Camaro',
+            'maxSpeed' => null,
+            'keys' => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertNull($camaro->maxSpeed);
+    }
 }
