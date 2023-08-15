@@ -373,11 +373,26 @@ class SimpleHydratorTest extends TestCase
         Human::collectionFromArray($this->data);
     }
 
-    public function testItCanParseEnum()
+    public function testItCanParseEnumFromValue()
     {
         $data = [
             'brand' => 'Chevrolet',
             'color' => 'yellow',
+            'type' => 'Camaro',
+            'keys' => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertSame(Color::YELLOW, $camaro->color);
+    }
+
+    public function testItCanParseEnum()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'color' => Color::YELLOW,
             'type' => 'Camaro',
             'keys' => null,
         ];

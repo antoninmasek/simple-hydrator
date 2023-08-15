@@ -14,6 +14,10 @@ class EnumCaster extends Caster
             return null;
         }
 
+        if ($value instanceof $this->class_name) {
+            return $value;
+        }
+
         return $this->class_name::from($value);
     }
 }
