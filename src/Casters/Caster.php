@@ -13,7 +13,7 @@ abstract class Caster
 
     private static array $casters = [];
 
-    public function __construct(protected string $class_name)
+    public function __construct(protected string $class_name, protected bool $allows_null = false)
     {
     }
 
@@ -45,7 +45,7 @@ abstract class Caster
      * @throws InvalidCasterException
      * @throws UnknownCasterException
      */
-    public static function make(string $className): Caster
+    public static function make(string $className, bool $allowsNull): Caster
     {
         $casterClassNameOrCallable = ! array_key_exists($className, self::$casters)
             ? self::CASTERS_NAMESPACE."\\$className".self::CASTERS_SUFFIX
@@ -55,11 +55,15 @@ abstract class Caster
             return self::handleCallableCaster($casterClassNameOrCallable);
         }
 
+        if (! class_exists($casterClassNameOrCallable) && enum_exists($className)) {
+            return new EnumCaster($className, $allowsNull);
+        }
+
         if (! class_exists($casterClassNameOrCallable)) {
             throw new UnknownCasterException($casterClassNameOrCallable);
         }
 
-        $caster = new $casterClassNameOrCallable($className);
+        $caster = new $casterClassNameOrCallable($className, $allowsNull);
 
         if (! ($caster instanceof Caster)) {
             throw new InvalidCasterException();

@@ -9,9 +9,11 @@ use AntoninMasek\SimpleHydrator\Hydrator;
 use AntoninMasek\SimpleHydrator\Tests\Casters\TestingCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Car;
 use AntoninMasek\SimpleHydrator\Tests\Models\ClassThatNeedsCustomCaster;
+use AntoninMasek\SimpleHydrator\Tests\Models\Color;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
 use AntoninMasek\SimpleHydrator\Tests\Models\Key;
 use PHPUnit\Framework\TestCase;
+use ValueError;
 
 class SimpleHydratorTest extends TestCase
 {
@@ -369,5 +371,50 @@ class SimpleHydratorTest extends TestCase
         $this->expectException(InvalidInputDataException::class);
 
         Human::collectionFromArray($this->data);
+    }
+
+    public function testItCanParseEnum()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'color' => 'yellow',
+            'type' => 'Camaro',
+            'keys' => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertSame(Color::YELLOW, $camaro->color);
+    }
+
+    public function testItFailsWithInvalidEnum()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'color' => 'invalid_color',
+            'type' => 'Camaro',
+            'keys' => null,
+        ];
+
+        $this->expectException(ValueError::class);
+
+        /** @var Car $camaro */
+        Hydrator::hydrate(Car::class, $data);
+    }
+
+    public function testEnumCanBeNull()
+    {
+        $data = [
+            'brand' => 'Chevrolet',
+            'color' => null,
+            'type' => 'Camaro',
+            'keys' => null,
+        ];
+
+        /** @var Car $camaro */
+        $camaro = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertNull($camaro->color);
     }
 }

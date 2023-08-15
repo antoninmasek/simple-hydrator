@@ -48,12 +48,14 @@ abstract class Hydrator
      */
     private static function hydrateProperty(\ReflectionProperty $property, mixed $value): mixed
     {
+        $allowsNull = $property->getType()->allowsNull();
+
         if (($attributes = $property->getAttributes(Collection::class)) && is_array($value)) {
             $targetClassName = $attributes[0]->getArguments()[0];
 
-            $value = array_map(function (mixed $item) use ($targetClassName) {
+            $value = array_map(function (mixed $item) use ($targetClassName, $allowsNull) {
                 if (Caster::existsFor($targetClassName) || ! is_array($item)) {
-                    return self::cast($targetClassName, $item);
+                    return self::cast($targetClassName, $item, $allowsNull);
                 }
 
                 return self::hydrate($targetClassName, $item);
@@ -64,17 +66,17 @@ abstract class Hydrator
             return $value;
         }
 
-        return self::cast($property->getType()->getName(), $value);
+        return self::cast($property->getType()->getName(), $value, $allowsNull);
     }
 
     /**
      * @throws Exceptions\InvalidCasterException
      * @throws CasterException
      */
-    private static function cast(string $className, mixed $value): mixed
+    private static function cast(string $className, mixed $value, bool $allowsNull): mixed
     {
         try {
-            return Caster::make($className)->cast($value);
+            return Caster::make($className, $allowsNull)->cast($value);
         } catch (UnknownCasterException) {
             if (! is_null($value) && ! is_array($value)) {
                 throw CasterException::invalidValue($className, $value);
