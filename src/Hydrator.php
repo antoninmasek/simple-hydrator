@@ -63,7 +63,10 @@ abstract class Hydrator
         }
 
         if ($property->getType()->isBuiltin()) {
-            return $value;
+            return match ($property->getType()->getName()) {
+                'bool' => filter_var($value, FILTER_VALIDATE_BOOL),
+                default => $value,
+            };
         }
 
         return self::cast($property->getType()->getName(), $value, $allowsNull);

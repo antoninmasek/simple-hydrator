@@ -84,6 +84,31 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('Porsche', $car->brand);
     }
 
+    public function testItCanHydrateBool()
+    {
+        $data = $this->data;
+        $data['male'] = false;
+
+        $person = Hydrator::hydrate(Human::class, $data);
+        $this->assertSame(false, $person->male);
+
+        $data['male'] = 'true';
+        $person = Hydrator::hydrate(Human::class, $data);
+        $this->assertSame(true, $person->male);
+
+        $data['male'] = 'false';
+        $person = Hydrator::hydrate(Human::class, $data);
+        $this->assertSame(false, $person->male);
+
+        $data['male'] = 'TRUE';
+        $person = Hydrator::hydrate(Human::class, $data);
+        $this->assertSame(true, $person->male);
+
+        $data['male'] = 'FALSE';
+        $person = Hydrator::hydrate(Human::class, $data);
+        $this->assertSame(false, $person->male);
+    }
+
     public function testObjectCanHydrateItselfWhenExtendingHydrator()
     {
         $person = Human::fromArray($this->data);
