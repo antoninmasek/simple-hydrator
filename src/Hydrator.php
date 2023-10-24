@@ -3,11 +3,11 @@
 namespace AntoninMasek\SimpleHydrator;
 
 use AntoninMasek\SimpleHydrator\Attributes\Collection;
+use AntoninMasek\SimpleHydrator\Attributes\Key;
 use AntoninMasek\SimpleHydrator\Casters\Caster;
 use AntoninMasek\SimpleHydrator\Exceptions\CasterException;
 use AntoninMasek\SimpleHydrator\Exceptions\UnknownCasterException;
-use AntoninMasek\SimpleHydrator\Support\Arr;
-use AntoninMasek\SimpleHydrator\Support\Str;
+use ReflectionProperty;
 
 abstract class Hydrator
 {
@@ -21,17 +21,19 @@ abstract class Hydrator
             return null;
         }
 
-        $data = Arr::mapKeys($data, function ($key) {
-            return Str::removeInvalidCharacters($key);
-        });
-
         $reflectionClass = new \ReflectionObject($dto = new $className());
-        $publicProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $publicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {
-            $value = ! array_key_exists($property->getName(), $data)
+            $attributes = $property->getAttributes(Key::class);
+
+            $key = ! empty($attributes)
+                ? $attributes[0]->getArguments()[0]
+                : $property->getName();
+
+            $value = ! array_key_exists($key, $data)
                 ? $property->getDefaultValue()
-                : $data[$property->getName()];
+                : $data[$key];
 
             $property->setValue(
                 $dto,
@@ -46,7 +48,7 @@ abstract class Hydrator
      * @throws CasterException
      * @throws Exceptions\InvalidCasterException
      */
-    private static function hydrateProperty(\ReflectionProperty $property, mixed $value): mixed
+    private static function hydrateProperty(ReflectionProperty $property, mixed $value): mixed
     {
         $allowsNull = $property->getType()->allowsNull();
 

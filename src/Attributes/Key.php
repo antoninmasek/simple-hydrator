@@ -5,9 +5,9 @@ namespace AntoninMasek\SimpleHydrator\Attributes;
 use Attribute;
 
 #[Attribute]
-class Collection
+class Key
 {
-    public function __construct(public string $class_name)
+    public function __construct(public string $key)
     {
     }
 }

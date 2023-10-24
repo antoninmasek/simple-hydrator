@@ -11,6 +11,7 @@ use AntoninMasek\SimpleHydrator\Tests\Models\Car;
 use AntoninMasek\SimpleHydrator\Tests\Models\ClassThatNeedsCustomCaster;
 use AntoninMasek\SimpleHydrator\Tests\Models\Color;
 use AntoninMasek\SimpleHydrator\Tests\Models\Human;
+use AntoninMasek\SimpleHydrator\Tests\Models\ImageData;
 use AntoninMasek\SimpleHydrator\Tests\Models\Key;
 use PHPUnit\Framework\TestCase;
 use ValueError;
@@ -200,15 +201,6 @@ class SimpleHydratorTest extends TestCase
         $person = Human::make()->dateOfBirth('test');
     }
 
-    public function testItIgnoresWhiteSpacesInPropertyNames()
-    {
-        $data = ['brand' => 'Ford', 'type' => 'Mustang', 'service Appointments' => ['2022-06-01']];
-
-        $car = Hydrator::hydrate(Car::class, $data);
-
-        $this->assertInstanceOf(\DateTime::class, $car->serviceAppointments[0]);
-    }
-
     public function testItFailsWithoutCustomCaster()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
@@ -288,7 +280,7 @@ class SimpleHydratorTest extends TestCase
                     'is_active' => false,
                 ],
             ],
-            'serviceAppointments' => [
+            'service Appointments' => [
                 '2022-06-01',
                 '2022-12-24',
             ],
@@ -500,5 +492,28 @@ class SimpleHydratorTest extends TestCase
         $camaro = Hydrator::hydrate(Car::class, $data);
 
         $this->assertNull($camaro->maxSpeed);
+    }
+
+    public function testItIsPossibleToUseAttributesToSpecifyKey()
+    {
+        $data = [
+            'ExifImageWidth' => $width = 4032,
+            'ExifImageHeight' => $height = 3024,
+        ];
+
+        /** @var ImageData $imageData */
+        $imageData = Hydrator::hydrate(ImageData::class, $data);
+
+        $this->assertSame($width, $imageData->width);
+        $this->assertSame($height, $imageData->height);
+    }
+
+    public function testItIsPossibleToUseKeyAttributeToSpecifyTheKey()
+    {
+        $data = ['brand' => 'Ford', 'type' => 'Mustang', 'service Appointments' => ['2022-06-01']];
+
+        $car = Hydrator::hydrate(Car::class, $data);
+
+        $this->assertInstanceOf(\DateTime::class, $car->serviceAppointments[0]);
     }
 }

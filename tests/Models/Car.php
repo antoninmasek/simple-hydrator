@@ -21,5 +21,6 @@ class Car
     public ?array $keys;
 
     #[Collection(\DateTime::class)]
+    #[\AntoninMasek\SimpleHydrator\Attributes\Key('service Appointments')]
     public ?array $serviceAppointments;
 }

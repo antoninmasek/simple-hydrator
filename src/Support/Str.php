@@ -12,9 +12,4 @@ final class Str
 
         return lcfirst($words);
     }
-
-    public static function removeInvalidCharacters($value): ?string
-    {
-        return preg_replace('/[^a-zA-Z0-9_]/', '', $value);
-    }
 }

@@ -65,6 +65,39 @@ $human = Human::fromArray($data);
 Main advantage is autocompletion as well as better readability. Disadvantage is, that you have to extend your data
 object. At least the parent. Nested object does not have to extend anything.
 
+### Different keys
+In a normal circumstances the package maps object property names 1:1 with input array keys. This might not be always optimal.
+Either the input array might contain invalid characters for PHP properties, or you just want assign your own names. Let's demonstrate
+this with an example. Imagine we want to get image dimensions and the input array has the following format:
+```php
+$imageData = [
+    "ExifImageWidth" => 4032,
+    "ExifImageHeight" => 3024,
+]
+```
+But we want our DTO to look like this:
+```php
+class ImageData
+{
+    public int $width;
+    public int $height;
+}
+```
+The solution to this is to use `Key` attribute and specify the real key value from the source array:
+```php
+use AntoninMasek\SimpleHydrator\Attributes\Key;
+
+class ImageData
+{
+    #[Key('ExifImageWidth')]
+    public int $width;
+    
+    #[Key('ExifImageHeight')]
+    public int $height;
+}
+```
+And that's it!
+
 ### Collections
 
 If you find yourself in a scenario, where you'd have let's say a `Car` object that has many `Key` objects:
