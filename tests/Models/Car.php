@@ -3,7 +3,6 @@
 namespace AntoninMasek\SimpleHydrator\Tests\Models;
 
 use AntoninMasek\SimpleHydrator\Attributes\Collection;
-use DateTime;
 
 class Car
 {
