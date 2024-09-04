@@ -15,13 +15,13 @@ abstract class Hydrator
      * @throws CasterException
      * @throws Exceptions\InvalidCasterException
      */
-    public static function hydrate(string $className, array $data = null): ?object
+    public static function hydrate(string $className, ?array $data = null): ?object
     {
         if (empty($data)) {
             return null;
         }
 
-        $reflectionClass = new \ReflectionObject($dto = new $className());
+        $reflectionClass = new \ReflectionObject($dto = new $className);
         $publicProperties = $reflectionClass->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($publicProperties as $property) {

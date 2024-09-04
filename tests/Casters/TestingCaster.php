@@ -9,9 +9,9 @@ class TestingCaster extends Caster
 {
     public function cast(mixed $value): ClassThatNeedsCustomCaster
     {
-        $class = new ClassThatNeedsCustomCaster();
+        $class = new ClassThatNeedsCustomCaster;
 
-        $class->value = floatval((new \DateTime())->format('n')) + $value;
+        $class->value = floatval((new \DateTime)->format('n')) + $value;
 
         return $class;
     }

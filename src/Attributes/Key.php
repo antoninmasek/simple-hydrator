@@ -7,7 +7,5 @@ use Attribute;
 #[Attribute]
 class Key
 {
-    public function __construct(public string $key)
-    {
-    }
+    public function __construct(public string $key) {}
 }

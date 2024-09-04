@@ -13,9 +13,7 @@ abstract class Caster
 
     private static array $casters = [];
 
-    public function __construct(protected string $class_name, protected bool $allows_null = false)
-    {
-    }
+    public function __construct(protected string $class_name, protected bool $allows_null = false) {}
 
     public static function setCasters(array $map): array
     {
@@ -66,7 +64,7 @@ abstract class Caster
         $caster = new $casterClassNameOrCallable($className, $allowsNull);
 
         if (! ($caster instanceof Caster)) {
-            throw new InvalidCasterException();
+            throw new InvalidCasterException;
         }
 
         return $caster;
@@ -76,9 +74,7 @@ abstract class Caster
     {
         return new class($callable) extends Caster
         {
-            public function __construct(private mixed $callable)
-            {
-            }
+            public function __construct(private mixed $callable) {}
 
             public function cast(mixed $value): mixed
             {

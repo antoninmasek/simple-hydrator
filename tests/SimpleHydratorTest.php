@@ -218,7 +218,7 @@ class SimpleHydratorTest extends TestCase
 
         $class = Hydrator::hydrate(Car::class, $data);
 
-        $expectedValue = floatval((new \DateTime())->format('n')) + 36;
+        $expectedValue = floatval((new \DateTime)->format('n')) + 36;
         $this->assertSame($expectedValue, $class->customCaster->value);
     }
 
@@ -227,16 +227,16 @@ class SimpleHydratorTest extends TestCase
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
 
         Caster::registerCaster(ClassThatNeedsCustomCaster::class, function ($value) {
-            $class = new ClassThatNeedsCustomCaster();
+            $class = new ClassThatNeedsCustomCaster;
 
-            $class->value = floatval((new \DateTime())->format('n')) + $value;
+            $class->value = floatval((new \DateTime)->format('n')) + $value;
 
             return $class;
         });
 
         $class = Hydrator::hydrate(Car::class, $data);
 
-        $expectedValue = floatval((new \DateTime())->format('n')) + 36;
+        $expectedValue = floatval((new \DateTime)->format('n')) + 36;
         $this->assertSame($expectedValue, $class->customCaster->value);
     }
 
@@ -250,7 +250,7 @@ class SimpleHydratorTest extends TestCase
                 return null;
             }
 
-            return (new \DateTime())->setTimestamp($value);
+            return (new \DateTime)->setTimestamp($value);
         });
 
         $person = Human::fromArray($data);
@@ -328,7 +328,7 @@ class SimpleHydratorTest extends TestCase
         ];
 
         Caster::registerCaster(Key::class, function ($value) {
-            $key = new Key();
+            $key = new Key;
 
             $key->name = 'overwritten';
 

@@ -18,7 +18,7 @@ class DataObject
      * @throws Exceptions\CasterException
      * @throws Exceptions\InvalidCasterException
      */
-    public static function fromArray(array $data = null): ?static
+    public static function fromArray(?array $data = null): ?static
     {
         if (Arr::isList($data)) {
             throw InvalidInputDataException::unexpectedArrayList();

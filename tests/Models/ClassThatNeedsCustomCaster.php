@@ -6,7 +6,5 @@ class ClassThatNeedsCustomCaster
 {
     public float $value;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 }
