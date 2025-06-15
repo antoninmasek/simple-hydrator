@@ -48,7 +48,7 @@ class SimpleHydratorTest extends TestCase
         ];
     }
 
-    public function testItCanHydrateObjectUsingHydrator()
+    public function test_it_can_hydrate_object_using_hydrator()
     {
         $person = Hydrator::hydrate(Human::class, $this->data);
 
@@ -85,7 +85,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('Porsche', $car->brand);
     }
 
-    public function testItCanHydrateBool()
+    public function test_it_can_hydrate_bool()
     {
         $data = $this->data;
         $data['male'] = false;
@@ -110,7 +110,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame(false, $person->male);
     }
 
-    public function testObjectCanHydrateItselfWhenExtendingHydrator()
+    public function test_object_can_hydrate_itself_when_extending_hydrator()
     {
         $person = Human::fromArray($this->data);
 
@@ -141,28 +141,28 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('Porsche', $car->brand);
     }
 
-    public function testItReturnsNullWhenNullIsSupplied()
+    public function test_it_returns_null_when_null_is_supplied()
     {
         $person = Hydrator::hydrate(Human::class, null);
 
         $this->assertNull($person);
     }
 
-    public function testItReturnsNullWhenEmptyArrayIsSupplied()
+    public function test_it_returns_null_when_empty_array_is_supplied()
     {
         $person = Hydrator::hydrate(Human::class, []);
 
         $this->assertNull($person);
     }
 
-    public function testObjectCanSetValues()
+    public function test_object_can_set_values()
     {
         $person = Human::fromArray($this->data)->firstName('John');
 
         $this->assertSame('John', $person->first_name);
     }
 
-    public function testObjectCanSetValuesUsingSetter()
+    public function test_object_can_set_values_using_setter()
     {
         $person = Human::fromArray($this->data)->set('firstName', 'John');
         $this->assertSame('John', $person->first_name);
@@ -180,7 +180,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame('Steve', $person->first_name);
     }
 
-    public function testImmutability()
+    public function test_immutability()
     {
         $person = Human::fromArray($this->data);
         $this->assertSame('John', $person->name);
@@ -194,14 +194,14 @@ class SimpleHydratorTest extends TestCase
         $this->assertNotSame(spl_object_id($person), spl_object_id($person2));
     }
 
-    public function testObjectTypeError()
+    public function test_object_type_error()
     {
         $this->expectException(\TypeError::class);
 
         $person = Human::make()->dateOfBirth('test');
     }
 
-    public function testItFailsWithoutCustomCaster()
+    public function test_it_fails_without_custom_caster()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
 
@@ -210,7 +210,7 @@ class SimpleHydratorTest extends TestCase
         Hydrator::hydrate(Car::class, $data);
     }
 
-    public function testItIsPossibleToWriteCaster()
+    public function test_it_is_possible_to_write_caster()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
 
@@ -222,7 +222,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame($expectedValue, $class->customCaster->value);
     }
 
-    public function testItIsPossibleToWriteAnonymousCaster()
+    public function test_it_is_possible_to_write_anonymous_caster()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'customCaster' => 36.0];
 
@@ -240,7 +240,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame($expectedValue, $class->customCaster->value);
     }
 
-    public function testItIsPossibleToOverwriteDefaultCaster()
+    public function test_it_is_possible_to_overwrite_default_caster()
     {
         $data = $this->data;
         $data['dateOfBirth'] = -14256000;
@@ -265,7 +265,7 @@ class SimpleHydratorTest extends TestCase
         Human::fromArray($data);
     }
 
-    public function testCastACollectionOfObjects()
+    public function test_cast_a_collection_of_objects()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -296,7 +296,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $camaro->serviceAppointments[1]);
     }
 
-    public function testCastedCollectionOfObjectsCanBeSetToNull()
+    public function test_casted_collection_of_objects_can_be_set_to_null()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -310,7 +310,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertNull($camaro->keys);
     }
 
-    public function testRegisteredCastersAreUsedForCollections()
+    public function test_registered_casters_are_used_for_collections()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -342,7 +342,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertEquals('overwritten', $camaro->keys[1]->name);
     }
 
-    public function testItIsPossibleToParseAListArray()
+    public function test_it_is_possible_to_parse_a_list_array()
     {
         $array = [
             $this->data,
@@ -363,7 +363,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertEquals('Jane', $persons[1]->name);
     }
 
-    public function testItThrowsExceptionWhenListIsUsedWithFromArrayMethod()
+    public function test_it_throws_exception_when_list_is_used_with_from_array_method()
     {
         $array = [
             $this->data,
@@ -383,14 +383,14 @@ class SimpleHydratorTest extends TestCase
         Human::fromArray($array);
     }
 
-    public function testItThrowsExceptionWhenAssociativeArrayIsUsedWithCollectionFromArrayMethod()
+    public function test_it_throws_exception_when_associative_array_is_used_with_collection_from_array_method()
     {
         $this->expectException(InvalidInputDataException::class);
 
         Human::collectionFromArray($this->data);
     }
 
-    public function testItCanParseEnumFromValue()
+    public function test_it_can_parse_enum_from_value()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -405,7 +405,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame(Color::YELLOW, $camaro->color);
     }
 
-    public function testItCanParseEnum()
+    public function test_it_can_parse_enum()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -420,7 +420,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame(Color::YELLOW, $camaro->color);
     }
 
-    public function testItFailsWithInvalidEnum()
+    public function test_it_fails_with_invalid_enum()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -435,7 +435,7 @@ class SimpleHydratorTest extends TestCase
         Hydrator::hydrate(Car::class, $data);
     }
 
-    public function testEnumCanBeNull()
+    public function test_enum_can_be_null()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -450,7 +450,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertNull($camaro->color);
     }
 
-    public function testItHonorsDefaultValue()
+    public function test_it_honors_default_value()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -464,7 +464,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame(120, $camaro->maxSpeed);
     }
 
-    public function testItCanOverwritesDefaultValue()
+    public function test_it_can_overwrites_default_value()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -479,7 +479,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame(250, $camaro->maxSpeed);
     }
 
-    public function testItCanOverwritesDefaultValueWithNull()
+    public function test_it_can_overwrites_default_value_with_null()
     {
         $data = [
             'brand' => 'Chevrolet',
@@ -494,7 +494,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertNull($camaro->maxSpeed);
     }
 
-    public function testItIsPossibleToUseAttributesToSpecifyKey()
+    public function test_it_is_possible_to_use_attributes_to_specify_key()
     {
         $data = [
             'ExifImageWidth' => $width = 4032,
@@ -508,7 +508,7 @@ class SimpleHydratorTest extends TestCase
         $this->assertSame($height, $imageData->height);
     }
 
-    public function testItIsPossibleToUseKeyAttributeToSpecifyTheKey()
+    public function test_it_is_possible_to_use_key_attribute_to_specify_the_key()
     {
         $data = ['brand' => 'Ford', 'type' => 'Mustang', 'service Appointments' => ['2022-06-01']];
 
@@ -517,35 +517,35 @@ class SimpleHydratorTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $car->serviceAppointments[0]);
     }
 
-    public function testItSetsNullablePropertiesToNullNoMatterWhichTypeWhenSourceValueIsEmptyString()
+    public function test_it_sets_nullable_properties_to_null_no_matter_which_type_when_source_value_is_empty_string()
     {
         $data = $this->data;
-        $data["height"] = $height = 1.23;
+        $data['height'] = $height = 1.23;
 
         $person = Hydrator::hydrate(Human::class, $data);
 
         $this->assertSame($height, $person->height);
 
-        $data["height"] = "";
+        $data['height'] = '';
 
         $person2 = Hydrator::hydrate(Human::class, $data);
 
         $this->assertNull($person2->height);
     }
 
-    public function testItPreservesEmptyStringsAsStringsAndDoesNotSetThemToNull()
+    public function test_it_preserves_empty_strings_as_strings_and_does_not_set_them_to_null()
     {
         $data = $this->data;
-        $data["first_name"] = $firstName = "Sirius";
+        $data['first_name'] = $firstName = 'Sirius';
 
         $person = Hydrator::hydrate(Human::class, $data);
 
         $this->assertSame($firstName, $person->first_name);
 
-        $data["first_name"] = "";
+        $data['first_name'] = '';
 
         $person2 = Hydrator::hydrate(Human::class, $data);
 
-        $this->assertSame("", $person2->first_name);
+        $this->assertSame('', $person2->first_name);
     }
 }
