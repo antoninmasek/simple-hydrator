@@ -18,6 +18,8 @@ class Human extends DataObject
 
     public float $money;
 
+    public ?float $height;
+
     public bool $male;
 
     public array $items;

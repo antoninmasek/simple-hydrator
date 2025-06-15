@@ -516,4 +516,36 @@ class SimpleHydratorTest extends TestCase
 
         $this->assertInstanceOf(\DateTime::class, $car->serviceAppointments[0]);
     }
+
+    public function testItSetsNullablePropertiesToNullNoMatterWhichTypeWhenSourceValueIsEmptyString()
+    {
+        $data = $this->data;
+        $data["height"] = $height = 1.23;
+
+        $person = Hydrator::hydrate(Human::class, $data);
+
+        $this->assertSame($height, $person->height);
+
+        $data["height"] = "";
+
+        $person2 = Hydrator::hydrate(Human::class, $data);
+
+        $this->assertNull($person2->height);
+    }
+
+    public function testItPreservesEmptyStringsAsStringsAndDoesNotSetThemToNull()
+    {
+        $data = $this->data;
+        $data["first_name"] = $firstName = "Sirius";
+
+        $person = Hydrator::hydrate(Human::class, $data);
+
+        $this->assertSame($firstName, $person->first_name);
+
+        $data["first_name"] = "";
+
+        $person2 = Hydrator::hydrate(Human::class, $data);
+
+        $this->assertSame("", $person2->first_name);
+    }
 }

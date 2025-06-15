@@ -52,6 +52,11 @@ abstract class Hydrator
     {
         $allowsNull = $property->getType()->allowsNull();
 
+        // Convert empty strings to null for nullable non-string properties
+        if ($allowsNull && $value === '' && $property->getType()->getName() !== 'string') {
+            return null;
+        }
+
         if (($attributes = $property->getAttributes(Collection::class)) && is_array($value)) {
             $targetClassName = $attributes[0]->getArguments()[0];
 
